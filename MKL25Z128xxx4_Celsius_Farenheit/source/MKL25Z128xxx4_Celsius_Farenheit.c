@@ -48,8 +48,6 @@
  */
 int main(void) {
 
-
-
   	/* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
