@@ -48,7 +48,7 @@
 
 /* TODO: insert other definitions and declarations here. */
 #define MAX_COUNTER 20u
-#define SECS 10u
+#define SECS 2u
 #define TIEMPO (SECS*256)-1
 
 void delay(uint32_t ticks);

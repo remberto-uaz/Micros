@@ -29,7 +29,7 @@
  */
  
 /**
- * @file    MKL25Z128_LCD_Example.c
+ * @file    Ejemplo_UART.c
  * @brief   Application entry point.
  */
 #include <stdio.h>
@@ -39,21 +39,10 @@
 #include "clock_config.h"
 #include "MKL25Z4.h"
 #include "fsl_debug_console.h"
+#include "fsl_uart.h"
 /* TODO: insert other include files here. */
-#include "LCD.h"
+
 /* TODO: insert other definitions and declarations here. */
-
-/*
- * void LCD_Data(uint8_t *HIGH, uint8_t *LOW, uint8_t c)
- *
- * @param
- *
- * HIGH pointer to 8 bit register with high bits of c on the lower bits
- * LOW  pointer to 8 bit register with low bits of on the lower bits
- */
-void LCD_Data(uint8_t *high, uint8_t *low, uint8_t c);
-
-
 
 /*
  * @brief   Application entry point.
@@ -68,34 +57,22 @@ int main(void) {
     BOARD_InitDebugConsole();
 
     PRINTF("Hello World\n");
-    LCD_Set(1u,1u,1u);
-    LCD_Clear();
-    LCD_Write('M');
-    LCD_Write('i');
-    LCD_Write('c');
-    LCD_Write('r');
-    LCD_Write('o');
-    LCD_Write('s');
-    LCD_Write('o');
-    LCD_Write('n');
-    LCD_Write('t');
-    LCD_Write('r');
-    LCD_Write('o');
-    LCD_Write('l');
-    LCD_Write('a');
-    LCD_Write('d');
-    LCD_Write('o');
-    LCD_Write('r');
 
+    uart_config_t user_config;
+    UART_GetDefaultConfig(&user_config);
+    user_config.baudRate_Bps = 115200U;
+    user_config.enableTx = true;
+    user_config.enableRx = true;
+
+    UART_Init(UART1,&user_config,24000000U);
     /* Force the counter to be placed into memory. */
-    volatile static int i = 0 ;
+    //volatile static int i = 0 ;
     /* Enter an infinite loop, just incrementing a counter. */
+    uint8_t ch;
     while(1) {
-        i++ ;
-        /* 'Dummy' NOP to allow source level single stepping of
-            tight while() loop */
-        __asm volatile ("nop");
+    	UART_ReadBlocking(UART1, &ch, 1u);
+    	printf("%c",ch);
+    	UART_WriteBlocking(UART1, &ch, 1u);
     }
     return 0 ;
 }
-

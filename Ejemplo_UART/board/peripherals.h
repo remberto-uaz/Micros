@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2020 NXP
+ * Copyright 2017-2020 NXP
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,66 +27,30 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 /**
- * @file    MKL25Z128_Timer_01.c
- * @brief   Application entry point.
+ * @file    peripherals.h
+ * @brief   Peripherals initialization header file.
  */
-#include <stdio.h>
-#include "board.h"
-#include "peripherals.h"
-#include "pin_mux.h"
-#include "clock_config.h"
-#include "MKL25Z4.h"
-#include "fsl_debug_console.h"
-#include "fsl_tpm.h"
-/* TODO: insert other include files here. */
+ 
+/* This is a template for board specific configuration created by MCUXpresso IDE Project Wizard.*/
 
-/* TODO: insert other definitions and declarations here. */
+#ifndef _PERIPHERALS_H_
+#define _PERIPHERALS_H_
 
-/*
- * @brief   Application entry point.
+#if defined(__cplusplus)
+extern "C" {
+#endif /* __cplusplus */
+
+/**
+ * @brief 	Initialize peripherals specific settings.
  */
-int main(void) {
+void BOARD_InitBootPeripherals(void);
 
-  	/* Init board hardware. */
-    BOARD_InitBootPins();
-    BOARD_InitBootClocks();
-    BOARD_InitBootPeripherals();
-  	/* Init FSL debug console. */
-    BOARD_InitDebugConsole();
-
-    PRINTF("Hello World\n");
-
-
-    GPIO_SetPinsOutput(GPIOB, 1u<<18u); // Led Rojo Apagado
-    GPIO_ClearPinsOutput(GPIOB, 1u<<19u); // Led Verde Encendido
-
-    CLOCK_EnableClock(kCLOCK_Tpm0);		//Habilita el reloj en el TPM0
-
-    TPM0->MOD = 32767u;		// Establece el periodo 1 segundo
-
-    TPM0->SC |= 1u<<3u;		// Arranca el Timer
-
-
-    uint32_t MASK = 1u<<8u;
-    uint32_t OFF_MASK = MASK;
-    /* Enter an infinite loop, just incrementing a counter. */
-    while(1) {
-
-    	if(TPM0->STATUS & MASK)
-    	{
-    		GPIO_TogglePinsOutput(GPIOB, 1u<<18u); // Led Rojo
-    		GPIO_TogglePinsOutput(GPIOB, 1u<<19u); // Led Verde
-
-    		TPM0->STATUS &= OFF_MASK;	//Limpiando la bandera de overflow del timer
-    	}
-
-
-
-        /* 'Dummy' NOP to allow source level single stepping of
-            tight while() loop */
-        __asm volatile ("nop");
-    }
-    return 0 ;
+#if defined(__cplusplus)
 }
+#endif /* __cplusplus */
+
+#endif /* _PERIPHERALS_H_ */
+
+
